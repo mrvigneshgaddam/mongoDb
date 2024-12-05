@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon</title>
+</head>
+<body>
+    <h1>MongoDb Assignment </h1>
+    <ol>
+        
+        <li>Find all movies where:
+            <ol type="a">
+                <li>Runtime is greater than 150 minutes</li>
+                <code>db.movies.find({runtime:{$gt:150}},{title:true,_id:false})</code>
+                <li>Rating is higher than 8.5</li>
+                <code>db.movies.find({runtime:{$gt:150}},{title:true,_id:false})</code>
+                <li>Year is between 2000 and 2015 (inclusive)</li>
+                <code>db.movies.find({year:{$gt:2000,$lt:2015}},{title:true,_id:false})</code>
+                <li>Box office earnings were less than 500 million OR greater than 1 billion</li>
+                <code>db.movies.find({$or:[{boxOffice:{$lt:500}},{boxOffice:{$gt:1000}}]},{title:true,_id:false})</code>
+            </ol>
+        </li>
+        <br>
+        <li>Find movies directed by Christopher Nolan that won an Oscar, made more than 700 million at box office, and are available on Netflix.</li>
+        <code>db.movies.find({$and:[{director:"Christopher Nolan"},{isOscarWinner:true},{boxOffice:{$gt:700}},{streamingOn:{$in:["Netflix"]}}]},{title:true,_id:false})</code>
+        <br>
+        <br>    
+        <li>Find movies that have special features, where both behind-the-scenes content and deleted scenes are available.</li>
+        <code>db.movies.find({"specialFeatures.behindTheScenes":true,"specialFeatures.deletedScenes":true},{title:true,_id:false})
+        </code>
+        <br><br>
+        <li>Find movies where either Carrie-Anne Moss or Morgan Freeman is in the cast, have language options available, and can be watched on at least 2 streaming platforms.</li>
+        <code>db.movies.find({    cast: { $in: ["Carrie-Anne Moss", "Morgan Freeman"] },    languages: { $exists: true, $not: { $size: 0 } },    streamingOn: { $exists: true, $not: { $size: 1 } }},{title:true,_id:false})</code>
+        <br><br>
+        <li>For the movie "Inception", add Chinese to its languages.</li>
+        <code>db.movies.updateOne({title:"Inception"},{$push:{languages:"Chinese"}})</code>
+        <br><br>
+        <li>Add Michael Caine to the cast of all Christopher Nolan movies.</li>
+        <code>db.movies.updateMany({director:{$in:["Christopher Nolan"]}},{$push:{cast:"Michael Caine"}})</code>
+        <br><br>
+        <li>Add Disney+ as a streaming option for all movies longer than 140 minutes.</li>
+        <code>db.movies.updateMany({runtime:{$gt:140}},{$push:{streamingOn:"Disney+"}})
+        </code>
+        <br><br>
+        <li>Find movies that have exactly 2 genres and have box office earnings listed, but don't have any special features.</li>
+        <code>db.movies.find({genre:{$size:2},boxOffice:{$exists:true},specialFeatures:{$exists:false}},{title:true,_id:false})</code>
+        <br><br>
+        <li>Remove all movies with rating less than 8.0.</li>
+        <code>db.movies.deleteMany({rating:{$lt:8}})</code>
+        <br><br>
+        <li>Remove Netflix from the streaming platforms of all movies released before 2000.</li>
+        <code>db.movies.updateMany({year:{$lt:2000}},{$pull:{streamingOne:"Netflix"}})</code>
+        <br><br>
+        <li>Find movies where box office earnings are more than 10 times the runtime.</li>
+        <code></code>
+        <br><br>
+        <li>Find all movies available on exactly the same streaming platforms as "The Matrix".</li>
+        <code> db.movies.find({streamingOn:{$all:["Netflix","Amazon Prime"],$size:2}},{title:true,_id:false})</code>
+        <br><br>
+        <li>Find movies that have both "Action" and "Sci-Fi" in their genres.</li>
+        <code>db.movies.find({genre:{$all:["Action","Sci-Fi"]}},{title:true,_id:false})</code>
+        <br><br>
+        <li>Find movies where "Action" is the first genre listed.</li>
+        <code></code>
+        <br><br>
+        <li>Find movies that have exactly 3 cast members.</li>
+        <code>db.movies.find({cast:{$size:3}})</code>
+    </ol>
+</body>
+</html>
